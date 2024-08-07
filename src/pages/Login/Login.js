@@ -1,9 +1,11 @@
 import React from 'react'
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import './Login.css';
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
 import { signInWithPopup } from 'firebase/auth';
 import { GoogleAuthProvider } from 'firebase/auth';
+import { addDoc, collection, setDoc, doc } from 'firebase/firestore';
+
 
 const Login = () => {
 
@@ -11,9 +13,33 @@ const Login = () => {
         // const provider = new GoogleAuthProvider();
 
         signInWithPopup(auth, new GoogleAuthProvider())
-            .then((result) => {
+            .then( async (result) => {
                 // This gives you a Google Access Token. You can use it to access the Google API.
                 GoogleAuthProvider.credentialFromResult(result);
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                // const token = credential.accessToken;
+                const user = result.user;
+                //store usefull data in firestore
+                
+                const newUser = {
+                    fullName: user.displayName,
+                    email: user.email,
+                    mobile: user.phoneNumber,
+                    profilePic: user.photoURL,
+                    signInMethod: 'google',
+                    emailVerified: user.emailVerified
+                }
+
+                try {
+                    const docRef = doc(db, 'users', user.uid);
+                    const newData = await setDoc(docRef, newUser);
+
+                    // const docRef = await addDoc(collection(db, 'users'), newUser);
+                    console.log('Document written with ID: ', docRef.id);
+                } catch (e) {
+                    console.error('Error adding document: ', e);
+                }
+
                 // The signed-in user info.
                 console.log(result.user);
                 // IdP data available using getAdditionalUserInfo(result)
@@ -34,12 +60,12 @@ const Login = () => {
         <div className='d-flex align-items-center main-height'>
             <Container className='login-card px-0'>
                 <Row className='gx-0'>
-                    <Col md={6}>
+                    <Col md={6} className=''>
                         <div className='bg-white p-4 login-left-card'>
-                            <img src='https://inzint.com/wp-content/uploads/2024/05/inzint-logo-dark-1.png' alt='inzint-logo' height={60} />
+                            <img src='https://inzint.com/wp-content/uploads/2024/05/inzint-logo-dark-1.png' alt='inzint-logo' height={30} />
 
                             <Row className='my-5 justify-content-center'>
-                                <Col md={9} lg={9} xs={12}>
+                                <Col md={9} lg={9} xs={12} className='main-content'>
                                     <h1 className='text-center'>Welcom Back</h1>
                                     <p className='text-center'>Welcom Back! Please enter your credentials to login.</p>
                                     <Button variant='outline-dark' className='w-100 d-flex justify-content-center align-items-center my-4' onClick={loginWithGoogle}>
@@ -58,17 +84,21 @@ const Login = () => {
                                         <Button variant='dark' className='w-100 mt-4'>Login</Button>
                                     </Form>
 
+                                    <div className='mt-4'>
+                                        <p className='text-center text-secondary'>Don't have an account? <a href='/' className='text-dark'>Sign up for free</a></p>
+                                    </div>
+
                                 </Col>
                             </Row>
 
-                            <div className='mt-4'>
-                                <p className='text-center text-secondary'>Don't have an account? <a href='/' className='text-dark'>Sign up for free</a></p>
-                            </div>
                         </div>
                     </Col>
                     <Col md={6}>
                         <div className='login-right-card p-4'>
-                            <img src='https://uploads-ssl.webflow.com/612ca2a103cd4b980c51550f/6130a1922af7f304ee17a7ac_team-3.jpg' alt='Girl potrate' className='image-fill' />
+                            <p className='text-center fs-2 fw-bold'>We move 10x faster than our peers
+                                and stay consistent. While they're
+                                bogged down with design debt,
+                                we're releasing new features.</p>
                         </div>
                     </Col>
                 </Row>

@@ -13,14 +13,14 @@ const Login = () => {
         // const provider = new GoogleAuthProvider();
 
         signInWithPopup(auth, new GoogleAuthProvider())
-            .then( async (result) => {
+            .then(async (result) => {
                 // This gives you a Google Access Token. You can use it to access the Google API.
                 GoogleAuthProvider.credentialFromResult(result);
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 // const token = credential.accessToken;
                 const user = result.user;
                 //store usefull data in firestore
-                
+
                 const newUser = {
                     fullName: user.displayName,
                     email: user.email,
@@ -94,11 +94,21 @@ const Login = () => {
                         </div>
                     </Col>
                     <Col md={6}>
-                        <div className='login-right-card p-4'>
-                            <p className='text-center fs-2 fw-bold'>We move 10x faster than our peers
-                                and stay consistent. While they're
-                                bogged down with design debt,
-                                we're releasing new features.</p>
+                        <div className='login-right-card p-4 d-flex align-items-end position-relative'>
+                            <div className='position-absolute top-0 start-0 w-100 h-100' style={{ background: 'radial-gradient(circle, rgba(0,0,0,0) 70%, rgba(0,0,0,0.2) 125%)' }}></div>
+                            <div className='position-relative d-flex flex-column'>
+                                <p className='text-start fs-2 fw-bold text-white ps-2 '>
+                                    We move 10x faster than our peers <br />
+                                    and stay consistent. While they're <br />
+                                    bogged down with design debt, <br />
+                                    we're releasing new features.
+                                </p>
+                                <div className='text-white ps-2 mt-1' style={{ alignSelf: 'flex-start' }}>
+                                    <span className='fw-bold fs-3'>Sophie Hall</span><br />
+                                    <span className='fs-5 fw-bold lh-lg'>Founder, Inzint</span><br />
+                                    <span className='fw-normal'>Software consultancy firm</span>
+                                </div>
+                            </div>
                         </div>
                     </Col>
                 </Row>

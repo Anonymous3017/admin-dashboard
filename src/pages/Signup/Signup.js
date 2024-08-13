@@ -47,6 +47,9 @@ const Signup = () => {
                 signInMethod: 'google',
                 emailVerified: user.emailVerified
             };
+            // try email verification after sign up using firebase
+
+
 
             await setDoc(doc(db, 'users', user.uid), newUser);
 
@@ -95,8 +98,13 @@ const Signup = () => {
                         </div>
                     </Col>
                     <Col md={6}>
-                        <div className='signup-right-card p-4'>
-                            <p className='text-center fs-2 fw-bold'>Join us and move 10x faster with consistent releases and no design debt.</p>
+                        <div className='signup-right-card p-4 d-flex align-items-end justify-content-center position-relative'>
+                            <div className='position-absolute top-0 start-0 w-100 h-100' style={{ background: 'radial-gradient(circle, rgba(0,0,0,0) 70%, rgba(0,0,0,0.2) 125%)' }}></div>
+                            <div className='position-relative'>
+                                <p className='text-center fs-2 fw-bold text-white'>
+                                    Join us and move 10x faster with consistent releases and no design debt.
+                                </p>
+                            </div>
                         </div>
                     </Col>
                 </Row>
